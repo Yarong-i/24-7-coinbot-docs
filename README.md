@@ -23,3 +23,5 @@ Docs for a personal crypto trading bot — design/backtests/ops (not financial a
 
 ## License
 - **Docs**: CC BY 4.0 (see LICENSE)
+- Parameter changes: [`ops/param-log.md`](ops/param-log.md)  
+- Daily run logs: [`ops/run-logs/`](ops/run-logs/)
