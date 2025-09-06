@@ -25,3 +25,8 @@ Docs for a personal crypto trading bot — design/backtests/ops (not financial a
 - **Docs**: CC BY 4.0 (see LICENSE)
 - Parameter changes: [`ops/param-log.md`](ops/param-log.md)  
 - Daily run logs: [`ops/run-logs/`](ops/run-logs/)
+- ## Infrastructure & 24×7 Ops
+- Cloud VM에서 24시간 운영하는 방법: [docs/infra/24x7-vm.md](docs/infra/24x7-vm.md)
+- 보안/키 관리 가이드: [docs/infra/secrets.md](docs/infra/secrets.md)
+- 시스템 서비스(unit)/모니터링: [docs/infra/systemd-runbook.md](docs/infra/systemd-runbook.md)
+
