@@ -4,6 +4,7 @@ Docs for a personal crypto trading bot — design/backtests/ops (not financial a
 
 개인 연구용 **코인 자동매매/분석 프레임워크** 문서 레포입니다.  
 저는 이 시스템을 **개인 계정에서 소규모로 직접 테스트/운용**해 보았습니다.
+
 돈많은 백수를 꿈꿔 24시간 자동 코인매매봇 프로토타입 만들게 되었습니다.
 
 > **면책(Disclaimer)**  
