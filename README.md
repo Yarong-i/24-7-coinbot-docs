@@ -15,7 +15,7 @@ Docs for a personal crypto trading bot — design/backtests/ops (not financial a
 > 거래소 약관 및 관할 법규를 준수해 주세요.
 
 ## What’s inside
-- 아키텍처 개요(전략, 리스크, 실행/체크 루프) ['docs/infra/architecture'](docs/infra/architecture)
+- 아키텍처 개요(전략, 리스크, 실행/체크 루프) [`docs/infra/architecture`](docs/infra/architecture)
 - 파라미터 변경 로그/파라미터 변경 이유 및 값 
 - 생성한 커멘드 
 
