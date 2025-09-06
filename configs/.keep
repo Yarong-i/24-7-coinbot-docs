@@ -1,0 +1,8 @@
+# configs/btc_2025-09-06.yml (sanitized)
+timeframe: 5m
+leverage: 7
+entry_retest_tol_pct: 0.07
+entry_retest_window_s: 90
+entry_cooldown_s: 360
+atr_gate_mult: 1.20
+# no api keys here!
