@@ -1,53 +1,84 @@
+# 24-7-coinbot-docs — 명령어(Ops) & 알림 서비스 문서/코드
+
+아래 파일들을 **그대로** 리포에 추가/수정하면 됩니다. (경로 포함)
+
+---
+
+## 📌 README.md에 링크 추가 (패치용 스니펫)
+
+```md
+## What’s inside (추가)
+- [운영 명령어 치트시트](docs/ops/commands.md)
+- [알림 브리지(Notifier) 아키텍처/배포](docs/infra/notifier.md)
+```
+
+---
+
+## 📄 docs/ops/commands.md
+
+````md
 # Ops Commands — 운영 점검/튜닝 치트시트
 
-
 > 실운영에서 쓰던 점검 루틴을 한 파일에 모았습니다.
-
 
 ## 0) 기준시각(T0) 세팅
 ```bash
 # 없으면 최근 7시간 전으로
 [[ -z "$T0" ]] && export T0=$(date -u -d '7 hours ago' +%FT%TZ)
 echo "T0=$T0"
+````
 
-1) 실체결 성과 (fills / cycles)
+## 1) 실체결 성과 (fills / cycles)
 
+```bash
 for S in BTC SOL; do
-echo "=== $S since $T0 ==="
-sudo -u coinbot /usr/local/bin/bot-pnl --since "$T0" --symbol $S
-sudo -u coinbot /usr/local/bin/bot-pnl --since "$T0" --symbol $S --cycles
+  echo "=== $S since $T0 ==="
+  sudo -u coinbot /usr/local/bin/bot-pnl --since "$T0" --symbol $S
+  sudo -u coinbot /usr/local/bin/bot-pnl --since "$T0" --symbol $S --cycles
 done
+```
 
-2) 빈도·효율 요약 (cycles/h, PF)
+## 2) 빈도·효율 요약 (cycles/h, PF)
 
+```bash
 HRS=$(awk -v s="$(date -u -d "$T0" +%s)" -v n="$(date -u +%s)" 'BEGIN{printf "%.2f",(n-s)/3600}')
 for S in BTC SOL; do
-CYC=$(sudo -u coinbot /usr/local/bin/bot-pnl --since "$T0" --symbol $S --cycles \
-| awk -F'[, ]+' '/cycles/{print $4; exit}')
-PF=$(sudo -u coinbot /usr/local/bin/bot-pnl --since "$T0" --symbol $S --cycles \
-| awk '{for(i=1;i<=NF;i++) if($i=="PF"){print $(i+1); exit}}' | sed 's/[^0-9.\-]//g')
-CYH=$(awk -v c="$CYC" -v h="$HRS" 'BEGIN{if(h>0) printf "%.2f", c/h; else print "0.00"}')
-echo "$S | cycles=$CYC | cycles/h=$CYH | PF=$PF"
+  CYC=$(sudo -u coinbot /usr/local/bin/bot-pnl --since "$T0" --symbol $S --cycles \
+       | awk -F'[, ]+' '/cycles/{print $4; exit}')
+  PF=$(sudo -u coinbot /usr/local/bin/bot-pnl --since "$T0" --symbol $S --cycles \
+       | awk '{for(i=1;i<=NF;i++) if($i=="PF"){print $(i+1); exit}}' | sed 's/[^0-9.\-]//g')
+  CYH=$(awk -v c="$CYC" -v h="$HRS" 'BEGIN{if(h>0) printf "%.2f", c/h; else print "0.00"}')
+  echo "$S | cycles=$CYC | cycles/h=$CYH | PF=$PF"
 done
+```
 
-3) 알림/에러 로그 스캔 (T0 이후)
+## 3) 알림/에러 로그 스캔 (T0 이후)
+
+```bash
 sudo journalctl -u coinbot-position-notifier.service \
--S "@$(date -u -d "$T0" +%s)" --no-pager \
+  -S "@$(date -u -d "$T0" +%s)" --no-pager \
 | egrep -i 'New trade detected|진입|청산|flip|error' || true
+```
 
-4) 프로세스에 파라미터 실제 반영 확인
+> 참고: `408` 타임아웃이 드물게 있었음(일시 네트워크). **잦으면** `sudo systemctl restart coinbot-position-notifier.service`.
+
+## 4) 프로세스에 파라미터 실제 반영 확인
+
+```bash
 for s in btc sol; do
-pid=$(systemctl show -p MainPID coinbot@$s.service | cut -d= -f2)
-echo "[$s] pid=$pid"
-sudo cat /proc/$pid/environ | tr '\0' '\n' \
-| egrep '^(TIMEFRAME|LEVERAGE|ATR_GATE_MULT|ENTRY_RETEST_TOL_PCT|ENTRY_RETEST_WINDOW_S|ENTRY_COOLDOWN_S)='
+  pid=$(systemctl show -p MainPID coinbot@$s.service | cut -d= -f2)
+  echo "[$s] pid=$pid"
+  sudo cat /proc/$pid/environ | tr '\0' '\n' \
+    | egrep '^(TIMEFRAME|LEVERAGE|ATR_GATE_MULT|ENTRY_RETEST_TOL_PCT|ENTRY_RETEST_WINDOW_S|ENTRY_COOLDOWN_S)='
 done
+```
 
-5) 설정 변경 & 재시작 (예시)
+## 5) 설정 변경 & 재시작 (예시)
+
+```bash
 # BTC: ATR 게이트 조정
 sudo sed -i -E 's/^(ATR_GATE_MULT)=.*/\1=1.20/' /etc/default/coinbot-btc
 sudo systemctl restart coinbot@btc.service
-
 
 # SOL: 변경 전 백업
 sudo bash -lc 'f=/etc/default/coinbot-sol; cp -a "$f"{,.bak.$(date +%s)}'
@@ -58,26 +89,36 @@ sudo sed -i -E 's/^(ENTRY_COOLDOWN_S)=.*/\1=420/' /etc/default/coinbot-sol
 sudo sed -i -E 's/^(ATR_GATE_MULT)=.*/\1=1.12/' /etc/default/coinbot-sol
 sudo sed -i -E 's/^(TIMEFRAME)=.*/\1=3m/' /etc/default/coinbot-sol
 sudo systemctl restart coinbot@sol.service
+```
 
+## 6) 재시작 묶음 스크립트
 
-재시작 묶음 스크립트
+```bash
 scripts/restart-services.sh
+```
+
+````
 
 ---
 
-
 ## 📄 docs/infra/notifier.md
-
 
 ```md
 # Position Notifier — 아키텍처 & 배포
 
-
 봇이 로컬 UDS(Unix Domain Socket)에 **체결/상태** 이벤트를 쓰면, 브리지가 **필터링/보강 후 Discord**로 전송합니다.
 
-
 ## 아키텍처
-[coinbot@{btc,sol}] --(JSON over UDS)--> [/run/coinbot/notify.sock] | | | Notifier | (필터/보강/재시도) -------------------------------------> Discord Webhook
+````
+
+\[coinbot@{btc,sol}] --(JSON over UDS)--> \[/run/coinbot/notify.sock]
+\|                                   |
+\|                               Notifier
+\|                            (필터/보강/재시도)
+\-------------------------------------> Discord Webhook
+
+````
+
 ### 주요 기능
 - **화이트리스트**: 상태/시작/이어받음/경고/청산은 항상 통과
 - **ENTRY_NOTIFY_MODE=all**: 진입 문구 누락 방지(과거 `filled` 드롭 문제 개선)
@@ -85,44 +126,40 @@ scripts/restart-services.sh
 - **CONFIRM_EXCHANGE**: 엔트리/엑싯은 거래소 실체결 확인 시만 전송
 - **Retry**: 네트워크 오류시 지수백오프 재시도
 
-
 ## 메시지 포맷(예시)
 ```json
 {
-"ts": "2025-09-06T09:15:30Z",
-"type": "entry", // entry|exit|status|warn|liquidation|flip
-"symbol": "SOLUSDT",
-"side": "LONG",
-"price": 123.45,
-"qty": 0.80,
-"orderId": "1234567890",
-"extra": {"timeframe": "3m", "leverage": 3}
+  "ts": "2025-09-06T09:15:30Z",
+  "type": "entry",           // entry|exit|status|warn|liquidation|flip
+  "symbol": "SOLUSDT",
+  "side": "LONG",
+  "price": 123.45,
+  "qty": 0.80,
+  "orderId": "1234567890",
+  "extra": {"timeframe": "3m", "leverage": 3}
 }
+````
 
-배포 파일
+## 배포 파일
 
-systemd/coinbot-position-notifier.service — 서비스 유닛
+* `systemd/coinbot-position-notifier.service` — 서비스 유닛
+* `configs/coinbot-notifier.env.example` — 환경변수 예시
+* `scripts/send_test_notify.py` — 로컬 소켓으로 테스트 전송
+* `notifier/notifier.py` — 최소 동작 참조 구현(포트폴리오용)
 
-configs/coinbot-notifier.env.example — 환경변수 예시
+## 설치/실행
 
-scripts/send_test_notify.py — 로컬 소켓으로 테스트 전송
-
-notifier/notifier.py — 최소 동작 참조 구현(포트폴리오용)
-
-설치/실행
+```bash
 # 1) 바이너리/의존성 (requests, ccxt 선택)
 sudo pip3 install requests ccxt || true
-
 
 # 2) 환경파일 배치
 sudo install -d -m 0755 /etc/default
 sudo install -m 0644 configs/coinbot-notifier.env.example /etc/default/coinbot-notifier
-# → DISCORD_WEBHOOK_URL 등 채워넣기
-
+#   → DISCORD_WEBHOOK_URL 등 채워넣기
 
 # 3) 소켓 디렉토리
 sudo install -d -o coinbot -g coinbot -m 0755 /run/coinbot || true
-
 
 # 4) systemd 등록
 sudo install -d /usr/local/share/coinbot/notifier
@@ -131,44 +168,66 @@ sudo install -m 0644 systemd/coinbot-position-notifier.service /etc/systemd/syst
 sudo systemctl daemon-reload
 sudo systemctl enable --now coinbot-position-notifier.service
 
-
 # 5) 동작 확인
 journalctl -u coinbot-position-notifier.service -f
-python3 scripts/send_test_notify.py # 테스트 페이로드 전송
+python3 scripts/send_test_notify.py  # 테스트 페이로드 전송
+```
 
-🧰 scripts/restart-services.sh
+## 트러블슈팅
+
+* **HTTP 408/5xx**: 일시 네트워크/웹훅 문제 → 재시도/재시작
+* **소켓 Permission**: `/run/coinbot` 소유자/권한(coinbot\:coinbot, 0755) 확인
+* **메시지 누락**: ENTRY\_NOTIFY\_MODE=all, CONFIRM\_EXCHANGE=0으로 일시 완화 후 원인 추적
+
+```
+```
+
+---
+
+## 🧰 scripts/restart-services.sh
+
+```bash
 #!/usr/bin/env bash
 set -Eeuo pipefail
 sudo systemctl daemon-reload || true
 for s in btc sol; do sudo systemctl restart coinbot@${s}.service || true; done
 sudo systemctl restart coinbot-position-notifier.service || true
 echo "restarted: coinbot@btc, coinbot@sol, coinbot-position-notifier"
+```
 
-🧪 scripts/send_test_notify.py
+---
+
+## 🧪 scripts/send\_test\_notify.py
+
+```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os, socket, json, time
 SOCK = os.environ.get("NOTIFY_SOCKET", "/run/coinbot/notify.sock")
 msg = {
-"ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-"type": "entry",
-"symbol": "BTCUSDT",
-"side": "LONG",
-"price": 60000.0,
-"qty": 0.001,
-"orderId": "TEST-ORDER-1",
+    "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    "type": "entry",
+    "symbol": "BTCUSDT",
+    "side": "LONG",
+    "price": 60000.0,
+    "qty": 0.001,
+    "orderId": "TEST-ORDER-1",
 }
 with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
-s.connect(SOCK)
-s.sendall((json.dumps(msg) + "\n").encode())
+    s.connect(SOCK)
+    s.sendall((json.dumps(msg) + "\n").encode())
 print("sent test message to", SOCK)
+```
 
-🧩 systemd/coinbot-position-notifier.service
+---
+
+## 🧩 systemd/coinbot-position-notifier.service
+
+```ini
 [Unit]
 Description=Coinbot position notifier bridge
 After=network-online.target
 Wants=network-online.target
-
 
 [Service]
 Type=simple
@@ -180,76 +239,159 @@ Restart=always
 RestartSec=5s
 SyslogIdentifier=coinbot-position-notifier
 
-
 [Install]
 WantedBy=multi-user.target
+```
 
-🔑 configs/coinbot-notifier.env.example
+---
+
+## 🔑 configs/coinbot-notifier.env.example
+
+```bash
 # Notifier 환경 예시(실 값은 서버에서만 설정하고 깃에는 올리지 마세요)
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/xxxx/xxxx
 NOTIFY_SOCKET=/run/coinbot/notify.sock
-ENTRY_NOTIFY_MODE=all # all|filled
-STATUS_ENRICH=1 # 1: ccxt로 상태 주입
-CONFIRM_EXCHANGE=1 # 1: 실체결 확인 후 전송
+ENTRY_NOTIFY_MODE=all           # all|filled
+STATUS_ENRICH=1                 # 1: ccxt로 상태 주입
+CONFIRM_EXCHANGE=1              # 1: 실체결 확인 후 전송
 EXCHANGE=BINANCE
 API_KEY=__redacted__
 API_SECRET=__redacted__
 TIMEOUT_S=10
 MAX_RETRY=3
+```
 
-🐍 notifier/notifier.py
+---
+
+## 🐍 notifier/notifier.py
+
+```python
 #!/usr/bin/env python3
-"fields": fields
-}]}
+# -*- coding: utf-8 -*-
+import os, json, asyncio, time, sys
+import requests
 
+# 선택 의존성
+try:
+    import ccxt
+except Exception:
+    ccxt = None
+
+SOCK = os.environ.get("NOTIFY_SOCKET", "/run/coinbot/notify.sock")
+WEBHOOK = os.environ.get("DISCORD_WEBHOOK_URL", "")
+ENTRY_MODE = os.environ.get("ENTRY_NOTIFY_MODE", "all")  # all|filled
+STATUS_ENRICH = os.environ.get("STATUS_ENRICH", "0") == "1"
+CONFIRM = os.environ.get("CONFIRM_EXCHANGE", "0") == "1"
+TIMEOUT = int(os.environ.get("TIMEOUT_S", "10"))
+MAX_RETRY = int(os.environ.get("MAX_RETRY", "3"))
+
+ALWAYS_PASS = {"status", "start", "resume", "warn", "liquidation", "flip"}
+
+ex = None
+if CONFIRM or STATUS_ENRICH:
+    if ccxt is None:
+        print("ccxt not installed; exchange checks disabled", file=sys.stderr)
+    else:
+        exname = os.environ.get("EXCHANGE", "binance").lower()
+        klass = getattr(ccxt, exname)
+        ex = klass({
+            "apiKey": os.environ.get("API_KEY", ""),
+            "secret": os.environ.get("API_SECRET", ""),
+            "options": {"defaultType": "future"},
+            "enableRateLimit": True,
+            "timeout": TIMEOUT * 1000,
+        })
+
+async def post_discord(payload: dict):
+    for i in range(MAX_RETRY + 1):
+        try:
+            r = requests.post(WEBHOOK, json=payload, timeout=TIMEOUT)
+            if r.status_code < 300:
+                return True
+            print(f"webhook status={r.status_code} body={r.text[:240]}", file=sys.stderr)
+        except Exception as e:
+            print(f"webhook error: {e}", file=sys.stderr)
+        await asyncio.sleep(min(2 ** i, 10))
+    return False
+
+async def confirm_order(msg: dict) -> bool:
+    if not (CONFIRM and ex and msg.get("orderId") and msg.get("symbol")):
+        return True
+    try:
+        oid = str(msg["orderId"])  # allow clientOrderId as well
+        sym = msg["symbol"].replace(":", "/").replace("USDT:USDT", "USDT")
+        # try fetchOrder; fall back to recent trades
+        try:
+            o = ex.fetch_order(oid, sym)
+            return (o.get("status") in {"closed", "filled"})
+        except Exception:
+            trs = ex.fetch_trades(sym, limit=5)
+            return any(abs(t.get("price", 0) - msg.get("price", 0)) / max(1, msg.get("price", 1)) < 0.002 for t in trs)
+    except Exception as e:
+        print(f"confirm failed: {e}", file=sys.stderr)
+        return False
+
+def to_embed(msg: dict) -> dict:
+    title = f"{msg.get('type','event').upper()} | {msg.get('symbol','?')}"
+    fields = []
+    for k in ["side", "price", "qty", "orderId"]:
+        if k in msg:
+            fields.append({"name": k, "value": str(msg[k]), "inline": True})
+    if msg.get("extra"):
+        for k, v in msg["extra"].items():
+            fields.append({"name": f"extra.{k}", "value": str(v), "inline": True})
+    return {"embeds": [{
+        "title": title,
+        "description": msg.get("ts", time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())),
+        "fields": fields
+    }]}
 
 async def handle(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-peer = writer.get_extra_info('peername')
-try:
-data = await reader.readline()
-if not data:
-return
-msg = json.loads(data.decode().strip())
-t = str(msg.get("type", "")).lower()
-# filtering
-if t not in ALWAYS_PASS:
-if t == "entry" and ENTRY_MODE != "all":
-return
-if not WEBHOOK:
-print("WEBHOOK not set; drop", file=sys.stderr)
-return
-if not await confirm_order(msg):
-print("exchange confirm failed; drop", file=sys.stderr)
-return
-# enrich (optional)
-if STATUS_ENRICH and ex and t == "status" and msg.get("symbol"):
-try:
-pos = ex.fetch_positions_risk([msg["symbol"]])
-msg.setdefault("extra", {})["position_size"] = pos[0].get("contracts") if pos else None
-except Exception as e:
-print(f"enrich failed: {e}", file=sys.stderr)
-await post_discord(to_embed(msg))
-except Exception as e:
-print(f"handle error: {e}", file=sys.stderr)
-finally:
-try:
-writer.close(); await writer.wait_closed()
-except Exception:
-pass
-
+    peer = writer.get_extra_info('peername')
+    try:
+        data = await reader.readline()
+        if not data:
+            return
+        msg = json.loads(data.decode().strip())
+        t = str(msg.get("type", "")).lower()
+        # filtering
+        if t not in ALWAYS_PASS:
+            if t == "entry" and ENTRY_MODE != "all":
+                return
+        if not WEBHOOK:
+            print("WEBHOOK not set; drop", file=sys.stderr)
+            return
+        if not await confirm_order(msg):
+            print("exchange confirm failed; drop", file=sys.stderr)
+            return
+        # enrich (optional)
+        if STATUS_ENRICH and ex and t == "status" and msg.get("symbol"):
+            try:
+                pos = ex.fetch_positions_risk([msg["symbol"]])
+                msg.setdefault("extra", {})["position_size"] = pos[0].get("contracts") if pos else None
+            except Exception as e:
+                print(f"enrich failed: {e}", file=sys.stderr)
+        await post_discord(to_embed(msg))
+    except Exception as e:
+        print(f"handle error: {e}", file=sys.stderr)
+    finally:
+        try:
+            writer.close(); await writer.wait_closed()
+        except Exception:
+            pass
 
 async def main():
-try:
-os.unlink(SOCK)
-except FileNotFoundError:
-pass
-os.makedirs(os.path.dirname(SOCK), exist_ok=True)
-server = await asyncio.start_unix_server(handle, path=SOCK)
-os.chmod(SOCK, 0o666) # 편의상; 운영에선 소유권/umask로 제한 권장
-print(f"notifier listening on {SOCK}")
-async with server:
-await server.serve_forever()
-
+    try:
+        os.unlink(SOCK)
+    except FileNotFoundError:
+        pass
+    os.makedirs(os.path.dirname(SOCK), exist_ok=True)
+    server = await asyncio.start_unix_server(handle, path=SOCK)
+    os.chmod(SOCK, 0o666)  # 편의상; 운영에선 소유권/umask로 제한 권장
+    print(f"notifier listening on {SOCK}")
+    async with server:
+        await server.serve_forever()
 
 if __name__ == "__main__":
-asyncio.run(main())
+    asyncio.run(main())
+```
