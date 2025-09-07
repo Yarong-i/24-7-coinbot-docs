@@ -1,0 +1,52 @@
+# Run Report — 2025-09-07 (UTC)
+
+> 개인 연구/포트폴리오용 운영 기록. 투자 권유가 아닙니다.
+
+## 1) PnL (since $T0)
+BTC: fills 0, PF 0.00, fee 0.00, PnL +0.00 USDT  
+SOL: fills 2, PF ∞, fee 0.20, PnL +0.90 USDT
+
+## 2) 빈도·효율
+HRS ≈ (now - T0)  
+BTC | cycles=0 | cycles/h=0.00 | PF=0.00  
+SOL | cycles=1 | cycles/h=0.09 | PF=∞
+
+## 3) 알림/오류
+[notifier] 이벤트 없음 (T0 이후 매칭 無)
+
+## 4) 런타임 파라미터 스냅샷 (민감정보 제거)
+BTC: TIMEFRAME=5m, LEVERAGE=7, ENTRY_RETEST_TOL_PCT=0.07, ENTRY_RETEST_WINDOW_S=90, ENTRY_COOLDOWN_S=360, ATR_GATE_MULT=1.20  
+SOL: TIMEFRAME=3m, LEVERAGE=3, ENTRY_RETEST_TOL_PCT=0.07, ENTRY_RETEST_WINDOW_S=120, ENTRY_COOLDOWN_S=420, ATR_GATE_MULT=1.10
+
+## 5) 오늘의 액션
+- **BTC**: `ATR_GATE_MULT 1.20 → 1.10` *(24h cycles/h=0.00 < 목표 0.20; ATR% p80≈0.129 → 게이트가 상대적으로 높아 신호 과소로 판단)*  
+- **SOL**: `ATR_GATE_MULT 1.10 → 1.06` *(24h cycles/h=0.09 < 목표 0.30, PF 매우 양호 → 빈도 소폭↑; ATR% p80≈0.125 기준 완화)*  
+  ※ 리테스트/쿨다운은 유지(단일 변수 변경으로 효과 분리 관찰)
+
+## 6) 다음 점검 포인트
+- 조정 후 24~48h 추적: cycles/h(목표 **BTC≥0.20**, **SOL≥0.30**), **PF≥1.3**  
+- Notifier 무이벤트 지속 시 브리지/소켓 헬스 확인
+
+---
+
+## Why these changes (Rationale)
+
+### BTC — ATR_GATE_MULT 1.20 → 1.10
+- **Observation:** 24h cycles/h = **0.00** (< 목표 **0.20**), PF = **0.00** (체결 없음)
+- **ATR context:** 5m ATR% p80 = **0.129**  
+  Gate(old) = 1.20 × 0.129 = **0.155%** → Gate(new) = 1.10 × 0.129 = **0.142%** (**Δ −8.33%**)
+- **Interpretation:** 전형적 변동성(p80) 대비 게이트가 높아 **신호 과소**
+- **Action:** **완화 −0.10** (1.20→1.10). 리테스트/쿨다운 고정으로 효과 분리
+
+### SOL — ATR_GATE_MULT 1.10 → 1.06
+- **Observation:** 24h cycles/h = **0.09** (< 목표 **0.30**), PF = **∞** (소수 체결이지만 품질 양호)
+- **ATR context:** 3m ATR% p80 = **0.125**  
+  Gate(old) = 1.10 × 0.125 = **0.138%** → Gate(new) = 1.06 × 0.125 = **0.133%** (**Δ −3.64%**)
+- **Interpretation:** 빈도 부족, 품질 양호 → **과도하지 않게** 소폭 완화
+- **Action:** **완화 −0.04** (1.10→1.06). 리테스트/쿨다운 유지
+
+**Guardrails**
+- 한 번에 **한 변수(ATR)**만 변경 → 효과 분리
+- **Rollback:** 변경 후 PF < **1.2**면 직전 ATR 변경 **되돌림**
+- **Bounds:** `1.02 ≤ ATR_GATE_MULT ≤ 2.00`
+- **Follow-up:** 변경 후 **24–48h** 재평가(목표: **BTC≥0.20**, **SOL≥0.30**, **PF≥1.3**)
