@@ -22,4 +22,6 @@
 | 2025-09-06 11:20Z | SOL    | `ATR_GATE_MULT`  | 1.12 | 1.10 | 11h 동안 cycles=0 → 빈도 소폭 상향            | —    |
 | 2025-09-07 HH:MMZ | BTC | `ATR_GATE_MULT` | 1.20 | 1.10 | 24h cycles/h=0.00<0.20; ATR% p80≈0.129 → 신호 과소로 완화 | — |
 | 2025-09-07 HH:MMZ | SOL | `ATR_GATE_MULT` | 1.10 | 1.06 | 24h cycles/h=0.09<0.30, PF↑; ATR% p80≈0.125 → 빈도 소폭↑ | — |
+| 2025-09-08 HH:MMZ | BTC | `ATR_GATE_MULT` | 1.10 | 1.14 | 24h cycles/h≈0.17, PF=0.00 → 노이즈 컷 위해 소폭 강화(+3.6%, p80=0.091) | — |
+| 2025-09-08 HH:MMZ | SOL | `ATR_GATE_MULT` | 1.06 | 1.02 | 24h cycles/h≈0.08≪목표, PF↑ → 빈도 보강 소폭 완화(−3.8%, p80=0.189)     | — |
 
