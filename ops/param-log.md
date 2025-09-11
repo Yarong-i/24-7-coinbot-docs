@@ -30,4 +30,5 @@
 | 2025-09-10 HH:MMZ | SOL | `ENTRY_RETEST_TOL_PCT`| 0.07 | 0.08 | ATR=1.02(하한), cycles/h=0.00 → 리테스트 허용폭 상향으로 후보 신호 확대 | — |
 | 2025-09-11 HH:MMZ | BTC | `ATR_GATE_MULT`   | 1.08 | 1.05 | 22h cycles/h=0.00<0.20, p80=0.128 → 진입 억제 완화를 위해 추가 완화(−2.9%) | — |
 | 2025-09-11 HH:MMZ | SOL | `ENTRY_COOLDOWN_S`| 360  | 300  | ATR=1.02(하한), cycles/h=0.00 → 빈도 보강 위해 쿨다운 완화 | — |
-
+| 2025-09-12 HH:MMZ | ETH | `INIT_PARAMS`     | — | TIMEFRAME=3m,LEV=3,TOL=0.08,WIN=120,COOL=300,ATR=1.05 | 신규 편성(솔 슬롯 대체), 48h 관찰 시작 | — |
+| 2025-09-12 HH:MMZ | SOL | `SERVICE_STATE`   | active | stopped | ETH 실험 위해 임시 중지(설정 보존) | — |
