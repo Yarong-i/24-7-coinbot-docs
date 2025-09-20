@@ -45,4 +45,6 @@
 | 2025-09-16 HH:MMZ | ETH | `ENTRY_RETEST_TOL_PCT` | 0.09 | 0.10 | cycles/h=0.00<0.30, p80=0.186↑ → 리테스트 허용폭 확장(+0.01)       | — |
 | 2025-09-20T00:00Z | BTC | `ENTRY_RETEST_WINDOW_S` | 90 | 120 | 24h cycles=0 → 매칭폭 확대로 빈도↑ 시도 | — |
 | 2025-09-20T00:00Z | ETH | `ATR_GATE_MULT` | 1.06 | 1.02 | p80=0.189 → Gate 0.200%→0.193%(−3.8%), 무진입 완화 | — |
+| 2025-09-20T03:42Z | BTC | `ENTRY_RETEST_TOL_PCT`   | unset | 0.09 | 24h cycles=0, PF=0.00, p80=0.127% → 리테스트 통과율 보수적 확대 |
+| 2025-09-20T03:42Z | ETH | `ENTRY_RETEST_WINDOW_S`  | 150   | 180  | 24h cycles=0, PF=0.00, p80=0.14%  → 타이밍 미스 완화 |
 
