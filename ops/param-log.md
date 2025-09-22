@@ -47,4 +47,6 @@
 | 2025-09-20T00:00Z | ETH | `ATR_GATE_MULT` | 1.06 | 1.02 | p80=0.189 → Gate 0.200%→0.193%(−3.8%), 무진입 완화 | — |
 | 2025-09-20T03:42Z | BTC | `ENTRY_RETEST_TOL_PCT`   | unset | 0.09 | 24h cycles=0, PF=0.00, p80=0.127% → 리테스트 통과율 보수적 확대 |
 | 2025-09-20T03:42Z | ETH | `ENTRY_RETEST_WINDOW_S`  | 150   | 180  | 24h cycles=0, PF=0.00, p80=0.14%  → 타이밍 미스 완화 |
+| 2025-09-22T02:26Z | BTC | `ENTRY_RETEST_WINDOW_S` | 120 | 180 | 24h cycles=0, BTC p80=0.054% → 타이밍 미스 완화 | — |
+| 2025-09-22T02:26Z | ETH | `ENTRY_RETEST_TOL_PCT`  | 0.10 | 0.11 | 24h cycles=0, ETH p80=0.099% → 타겟 존 1bp 완화 | — |
 
