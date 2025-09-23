@@ -49,4 +49,9 @@
 | 2025-09-20T03:42Z | ETH | `ENTRY_RETEST_WINDOW_S`  | 150   | 180  | 24h cycles=0, PF=0.00, p80=0.14%  → 타이밍 미스 완화 |
 | 2025-09-22T02:26Z | BTC | `ENTRY_RETEST_WINDOW_S` | 120 | 180 | 24h cycles=0, BTC p80=0.054% → 타이밍 미스 완화 | — |
 | 2025-09-22T02:26Z | ETH | `ENTRY_RETEST_TOL_PCT`  | 0.10 | 0.11 | 24h cycles=0, ETH p80=0.099% → 타겟 존 1bp 완화 | — |
+| 2025-09-23T05:06Z | BTC | `ENTRY_RETEST_TOL_PCT`  | 0.09  | 0.15 | 24h cycles=0, p80=0.136% → 리테스트 폭 완화 | — |
+| 2025-09-23T05:06Z | BTC | `ENTRY_RETEST_WINDOW_S` | 180   | 300  | 리테스트 타이밍 미스 완화                   | — |
+| 2025-09-23T05:06Z | BTC | `ENTRY_COOLDOWN_S`      | 600   | 300  | 기회 재포착률↑/수수료 관리 하한선 300s      | — |
+| 2025-09-23T05:06Z | ETH | `ENTRY_RETEST_TOL_PCT`  | 0.11  | 0.13 | 24h cycles=0, p80=0.233% → 폭 소폭 완화      | — |
+| 2025-09-23T05:06Z | ETH | `ENTRY_RETEST_WINDOW_S` | 180   | 240  | 타이밍 미스 완화                              | — |
 
