@@ -54,4 +54,10 @@
 | 2025-09-23T05:06Z | BTC | `ENTRY_COOLDOWN_S`      | 600   | 300  | 기회 재포착률↑/수수료 관리 하한선 300s      | — |
 | 2025-09-23T05:06Z | ETH | `ENTRY_RETEST_TOL_PCT`  | 0.11  | 0.13 | 24h cycles=0, p80=0.233% → 폭 소폭 완화      | — |
 | 2025-09-23T05:06Z | ETH | `ENTRY_RETEST_WINDOW_S` | 180   | 240  | 타이밍 미스 완화                              | — |
+| 2025-09-24T01:30Z | BTC | `ENTRY_RETEST_TOL_PCT`  | 0.15 | 0.18 | 24h cycles=0, ATR p80=0.14% → 통과율↑ | — |
+| 2025-09-24T01:30Z | BTC | `ENTRY_RETEST_WINDOW_S` | 300  | 420  | 리테스트 타이밍 미스 완화               | — |
+| 2025-09-24T01:30Z | BTC | `ENTRY_COOLDOWN_S`      | 300  | 240  | 기회 재포착률↑                           | — |
+| 2025-09-24T01:30Z | ETH | `ENTRY_RETEST_TOL_PCT`  | 0.13 | 0.16 | 24h cycles=0, ATR p80=0.207% → 통과율↑  | — |
+| 2025-09-24T01:30Z | ETH | `ENTRY_RETEST_WINDOW_S` | 240  | 360  | 리테스트 타이밍 미스 완화               | — |
+| 2025-09-24T01:30Z | ETH | `ENTRY_COOLDOWN_S`      | 300  | 240  | 기회 재포착률↑                           | — |
 
