@@ -65,4 +65,6 @@
 | 2025-09-26T06:03Z | ETH | `ENTRY_RETEST_TOL_PCT`   | 0.20 | 0.35 | 24h ATR p80=0.324% 근접/상회                       | — |
 | 2025-09-26T06:03Z | ETH | `ENTRY_RETEST_WINDOW_S`  | 480  | 900  | 되돌림 타이밍 미스 완화                           | — |
 | 2025-09-26T06:03Z | ETH | `ENTRY_COOLDOWN_S`       | 120  | 60   | 재기회 포착률↑                                    | — |
+| $(date -u +%Y-%m-%dT%H:%MZ) | BTC | `TIMEFRAME` | 1m | 5m | 신호미유입→코드 기본 TF 정렬, 파이프라인 복구 | — |
+| $(date -u +%Y-%m-%dT%H:%MZ) | ETH | `TIMEFRAME` | 1m | 3m | 신호미유입→코드 기본 TF 정렬, 파이프라인 복구 | — |
 
