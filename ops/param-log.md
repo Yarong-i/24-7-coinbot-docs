@@ -67,4 +67,7 @@
 | 2025-09-26T06:03Z | ETH | `ENTRY_COOLDOWN_S`       | 120  | 60   | 재기회 포착률↑                                    | — |
 | $(date -u +%Y-%m-%dT%H:%MZ) | BTC | `TIMEFRAME` | 1m | 5m | 신호미유입→코드 기본 TF 정렬, 파이프라인 복구 | — |
 | $(date -u +%Y-%m-%dT%H:%MZ) | ETH | `TIMEFRAME` | 1m | 3m | 신호미유입→코드 기본 TF 정렬, 파이프라인 복구 | — |
+| When (UTC) | Symbol | Param | Before | After | Rationale | Notes |
+| 2025-09-29T04:18Z | BTC | ATR_GATE_MULT | 1.02 | 0.918 | 24h cycles/h=0.00, PF=0.00 → 진입 완화(-10%) | p80=0.088% → gate thr 0.0898%→0.0808% |
+| 2025-09-29T04:18Z | ETH | ATR_GATE_MULT | 1.00 | 0.90 | 24h cycles/h=0.00, PF=0.00 → 진입 완화(-10%) | p80=0.140% → gate thr 0.1400%→0.1260% |
 
