@@ -72,4 +72,6 @@
 | 2025-09-29T04:18Z | ETH | ATR_GATE_MULT | 1.00 | 0.90 | 24h cycles/h=0.00, PF=0.00 → 진입 완화(-10%) | p80=0.140% → gate thr 0.1400%→0.1260% |
 | 2025-09-30T07:35Z | BTC | ENTRY_RETEST_TOL_PCT | 0.30 | 0.45 | 24h cycles/h=0.00, PF=0.00 → 진입 완화(리테스트 허용오차 확대) | ATR gate 1.02 유지 |
 | 2025-09-30T07:35Z | ETH | TIMEFRAME | 1m | 3m | 24h cycles/h=0.00, PF=0.00 → ATR/신호 타임프레임 정합성 확보 | ATR gate 1.00 유지 |
+| 2025-10-01T05:06Z | BTC    | `ATR_GATE_MULT`  | 1.02   | 0.96  | 24h cycles/h=0.00, PF=0.00 → 게이트 완화로 기회 확대        | TF 5m 유지  |
+| 2025-10-01T05:06Z | ETH    | `ATR_GATE_MULT`  | 1.00   | 0.95  | 24h cycles/h=0.00, PF=0.00 → 게이트 완화로 기회 확대        | TF 3m 유지  |
 
