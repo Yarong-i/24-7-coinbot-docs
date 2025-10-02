@@ -74,4 +74,6 @@
 | 2025-09-30T07:35Z | ETH | TIMEFRAME | 1m | 3m | 24h cycles/h=0.00, PF=0.00 → ATR/신호 타임프레임 정합성 확보 | ATR gate 1.00 유지 |
 | 2025-10-01T05:06Z | BTC    | `ATR_GATE_MULT`  | 1.02   | 0.96  | 24h cycles/h=0.00, PF=0.00 → 게이트 완화로 기회 확대        | TF 5m 유지  |
 | 2025-10-01T05:06Z | ETH    | `ATR_GATE_MULT`  | 1.00   | 0.95  | 24h cycles/h=0.00, PF=0.00 → 게이트 완화로 기회 확대        | TF 3m 유지  |
+| 2025-10-02T04:49Z | BTC | `ATR_GATE_MULT` | 0.96 | 0.92 | 24h 무체결, ATR p80=0.151% → 게이트 완화 | **applied** |
+| 2025-10-02T04:49Z | ETH | `ENTRY_RETEST_WINDOW_S` | 120 | 240 | 24h 무체결, 3m TF 기준 대기 확장 | **applied** |
 
