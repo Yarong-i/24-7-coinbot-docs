@@ -76,4 +76,6 @@
 | 2025-10-01T05:06Z | ETH    | `ATR_GATE_MULT`  | 1.00   | 0.95  | 24h cycles/h=0.00, PF=0.00 → 게이트 완화로 기회 확대        | TF 3m 유지  |
 | 2025-10-02T04:49Z | BTC | `ATR_GATE_MULT` | 0.96 | 0.92 | 24h 무체결, ATR p80=0.151% → 게이트 완화 | **applied** |
 | 2025-10-02T04:49Z | ETH | `ENTRY_RETEST_WINDOW_S` | 120 | 240 | 24h 무체결, 3m TF 기준 대기 확장 | **applied** |
+| 2025-10-02T04:49Z | BTC | `ATR_GATE_MULT`           | 0.96 | 0.92 | 24h cycles=0, PF=0.00, p80(BTC 5m)=0.161% | **applied** |
+| 2025-10-02T04:49Z | ETH | `ENTRY_RETEST_WINDOW_S`   | 120  | 240  | 24h cycles=0, PF=0.00, p80(ETH 3m)=0.203% | **applied** |
 
