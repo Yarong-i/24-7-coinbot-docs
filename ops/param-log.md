@@ -78,4 +78,7 @@
 | 2025-10-02T04:49Z | ETH | `ENTRY_RETEST_WINDOW_S` | 120 | 240 | 24h 무체결, 3m TF 기준 대기 확장 | **applied** |
 | 2025-10-02T04:49Z | BTC | `ATR_GATE_MULT`           | 0.96 | 0.92 | 24h cycles=0, PF=0.00, p80(BTC 5m)=0.161% | **applied** |
 | 2025-10-02T04:49Z | ETH | `ENTRY_RETEST_WINDOW_S`   | 120  | 240  | 24h cycles=0, PF=0.00, p80(ETH 3m)=0.203% | **applied** |
+| 2025-10-04T04:49Z | SYS | `BINANCE_API_KEY/SECRET` | —    | configured | `/etc/coinbot/secret.env`(0640 root:coinbot), include 블록 적용 | — |
+| 2025-10-04T04:45Z | BTC | `ENTRY_RETEST_TOL_PCT`   | 0.45 | 0.60       | 24h 무체결 → 리테스트 성사율 제고                               | — |
+| 2025-10-04T04:45Z | ETH | `ATR_GATE_MULT`          | 0.95 | 0.90       | 24h 무체결 → ATR 게이트 완화                                   | — |
 
