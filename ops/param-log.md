@@ -81,4 +81,11 @@
 | 2025-10-04T04:49Z | SYS | `BINANCE_API_KEY/SECRET` | —    | configured | `/etc/coinbot/secret.env`(0640 root:coinbot), include 블록 적용 | — |
 | 2025-10-04T04:45Z | BTC | `ENTRY_RETEST_TOL_PCT`   | 0.45 | 0.60       | 24h 무체결 → 리테스트 성사율 제고                               | — |
 | 2025-10-04T04:45Z | ETH | `ATR_GATE_MULT`          | 0.95 | 0.90       | 24h 무체결 → ATR 게이트 완화                                   | — |
+| 2025-10-04T04:45Z | BTC | `ENTRY_RETEST_TOL_PCT` | 0.45 | 0.60 | 24h 무체결 → 성사율 제고 | — |
+| 2025-10-04T04:45Z | ETH | `ATR_GATE_MULT`        | 0.95 | 0.90 | 24h 무체결 → 게이트 완화 | — |
+| 2025-10-05T03:40Z | SYS | `SECRETS_ALIAS`        | —    | added| BINANCE_FUTURES_*/BINANCEUSDM_*/CCXT_BINANCE_* 동치 매핑 | — |
+| 2025-10-05T03:44Z | TOOL| `bot_pnl autoload`     | —    | added| /etc/coinbot/*.env 자동 적재 | — |
+| 2025-10-05T03:45Z | TOOL| `bot_kpis.py exit patch`| —   | added| 과잉 체크 무해화 | — |
+| 2025-10-05T03:48Z | TOOL| `bot_kpis.py key glue` | —    | added| KEY/SECRET 별칭 통합 주입 | — |
+| 2025-10-05T03:50Z | ALL | `NO_CHANGE`            | —    | —    | 단일변수 변경 효과 분리 위해 추가 변경 보류 | — |
 
