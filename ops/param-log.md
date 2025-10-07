@@ -90,4 +90,6 @@
 | 2025-10-05T03:50Z | ALL | `NO_CHANGE`            | —    | —    | 단일변수 변경 효과 분리 위해 추가 변경 보류 | — |
 | 2025-10-06T02:23Z | BTC | `ATR_GATE_MULT`         | 0.92 | 0.85 | 24h cycles/h=0.00, PF=n/a, ATR p80=0.187% → 진입 허들 완화로 체결률 제고 | — |
 | 2025-10-06T02:23Z | ETH | `ENTRY_RETEST_WINDOW_S` | 240  | 360  | 24h cycles/h=0.00, PF=n/a, ATR p80=0.191% → 리테스트 창 확장으로 기회 보강 | — |
+| 2025-10-07T04:13Z | BTC | `ENTRY_RETEST_TOL_PCT` | 0.60 | 0.80 | 24h cycles/h=0.00, PF=n/a, ATR p80=0.179% → 재터치 허용범위 확대 | — |
+| 2025-10-07T04:13Z | ETH | `ATR_GATE_MULT`        | 0.90 | 0.80 | 24h cycles/h=0.00, PF=n/a, ATR p80=0.190% → ATR 게이트 완화 | — |
 
